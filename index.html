@@ -3,6 +3,11 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <script>
+    const isMobile = window.matchMedia('(max-width: 768px), (pointer: coarse)').matches || window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    window.__portfolioIsMobile = isMobile;
+    if (isMobile) document.documentElement.classList.add('is-mobile');
+  </script>
   <title>TANISHQ — THE SERIES | Full-Stack & AI/ML Developer</title>
   <meta name="description" content="Interactive streaming-inspired portfolio of Tanishq Agarwal — Full-Stack Developer, AI/ML Builder, and B.Tech CSE student at JSS University, Noida." />
 
@@ -390,6 +395,29 @@
       opacity: 0;
       visibility: hidden;
       pointer-events: none;
+    }
+
+    /* Mobile devices bypass the cinematic ribbon layer before the first paint. */
+    html.is-mobile #netflix-intro {
+      display: none !important;
+    }
+
+    @media (max-width: 768px) {
+      /* Avoid expensive backdrop compositing on touch-sized screens. */
+      .backdrop-blur,
+      [class*="backdrop-blur-"] {
+        background-color: rgba(15, 15, 15, 0.96) !important;
+        backdrop-filter: none !important;
+        -webkit-backdrop-filter: none !important;
+      }
+
+      #intro-gate {
+        background-color: rgba(15, 15, 15, 0.96) !important;
+      }
+
+      header.sticky {
+        background-color: rgba(15, 15, 15, 0.96) !important;
+      }
     }
 
     .ribbon-stage {
@@ -2554,7 +2582,27 @@
       renderAchievements();
       initScrollAndAmbientObserver();
       initMetricsCounterObserver();
-      { let seen=false; try{seen=sessionStorage.getItem('introSeen')==='1';}catch(e){} seen?skipIntro():runNetflixIntro(); }
+      if (window.__portfolioIsMobile) {
+        // CSS has already hidden the ribbon layer; keep it inert and cancel any residual motion.
+        clearTimeout(introTimeout);
+        const intro = document.getElementById('netflix-intro');
+        if (intro) {
+          intro.classList.remove('playing');
+          intro.classList.add('intro-hidden');
+          if (typeof intro.getAnimations === 'function') {
+            intro.getAnimations({ subtree: true }).forEach(animation => animation.cancel());
+          }
+        }
+        document.querySelectorAll('#netflix-intro audio').forEach(audio => {
+          audio.pause();
+          audio.currentTime = 0;
+        });
+        try { sessionStorage.setItem('introSeen', '1'); } catch (e) {}
+      } else {
+        let seen = false;
+        try { seen = sessionStorage.getItem('introSeen') === '1'; } catch (e) {}
+        seen ? skipIntro() : runNetflixIntro();
+      }
       initCommandPaletteEvents();
       applyProfileState('developer', false);
       syncStickmanToggleButtons();
@@ -2598,6 +2646,8 @@
       const cfg = PROFILE_CONFIGS[role] || PROFILE_CONFIGS.developer;
       const visible = new Set(cfg.visible);
       document.body.dataset.profile = role;
+      // Recruiter and Client views lead with the personal Creator Cut; Monogram stays selectable.
+      switchPosterEdition(role === 'recruiter' || role === 'client' ? 'creator' : 'monogram');
       // Recruiter and Client views lead with the personal Creator Cut; Monogram remains one click away.
       switchPosterEdition(role === 'recruiter' || role === 'client' ? 'creator' : 'monogram');
 
@@ -2696,7 +2746,7 @@
       const zone = document.getElementById('poster-tilt-zone');
       const card = document.getElementById('poster-3d-card');
       const sheen = document.getElementById('poster-sheen');
-      if (!zone || !card) return;
+      if (window.__portfolioIsMobile || !zone || !card) return;
 
       zone.addEventListener('mousemove', (e) => {
         const rect = zone.getBoundingClientRect();
@@ -2758,7 +2808,15 @@
         }
       };
 
-      window.addEventListener('scroll', updateScrollProgress, { passive: true });
+      let scrollProgressFrame = 0;
+      const scheduleScrollProgress = () => {
+        if (scrollProgressFrame) return;
+        scrollProgressFrame = window.requestAnimationFrame(() => {
+          scrollProgressFrame = 0;
+          updateScrollProgress();
+        });
+      };
+      window.addEventListener('scroll', scheduleScrollProgress, { passive: true });
       updateScrollProgress();
 
       // Section Glow Color Shifter
@@ -3704,7 +3762,7 @@
     (function initCardTilt() {
       const card = document.getElementById('hero-collector-card');
       const glare = document.getElementById('poster-glare');
-      if (!card) return;
+      if (window.__portfolioIsMobile || !card) return;
 
       card.addEventListener('mousemove', (e) => {
         const rect = card.getBoundingClientRect();
