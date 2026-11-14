@@ -7,6 +7,12 @@
     const isMobile = window.matchMedia('(max-width: 768px), (pointer: coarse)').matches || window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     window.__portfolioIsMobile = isMobile;
     if (isMobile) document.documentElement.classList.add('is-mobile');
+    try {
+      const savedTheme = localStorage.getItem('portfolio-theme');
+      document.documentElement.setAttribute('data-theme', savedTheme === 'light' ? 'light' : 'dark');
+    } catch (error) {
+      document.documentElement.setAttribute('data-theme', 'dark');
+    }
   </script>
   <title>TANISHQ — THE SERIES | Full-Stack & AI/ML Developer</title>
   <meta name="description" content="Interactive streaming-inspired portfolio of Tanishq Agarwal — Full-Stack Developer, AI/ML Builder, and B.Tech CSE student at JSS University, Noida." />
@@ -99,9 +105,20 @@
       --glow2-r: 224;
       --glow2-g: 160;
       --glow2-b: 48;
-      --bg-base: #0b090b;
+      /* Semantic Dark Cinema Theme tokens */
+      --bg-primary: #141414;
+      --bg-secondary: #1b1b1b;
       --bg-card: #151018;
-      --crimson: #e50914;
+      --bg-header: rgba(20, 20, 20, 0.96);
+      --text-primary: #FFFFFF;
+      --text-secondary: #CBD5E1;
+      --border-color: rgba(255, 255, 255, 0.10);
+      --card-shadow: 0 10px 28px rgba(0, 0, 0, 0.42);
+      --accent: #E50914;
+      --accent-ink: #FF5962;
+      --accent-surface: #B20710;
+      --bg-base: var(--bg-primary);
+      --crimson: var(--accent);
       --crimson-alt: #d92d3f;
       --amber: #e0a030;
       --teal: #2a8fb0;
@@ -116,8 +133,8 @@
     }
 
     body {
-      background-color: var(--bg-base);
-      color: #f4f1f5;
+      background-color: var(--bg-primary);
+      color: var(--text-primary);
       font-family: 'Instrument Sans', system-ui, -apple-system, sans-serif;
       overflow-x: hidden;
       -webkit-font-smoothing: antialiased;
@@ -708,6 +725,147 @@
         contain-intrinsic-size: 1px 700px;
       }
     }
+
+    /* =====================================================================
+       THEME SYSTEM — instant semantic-token swap without replaying motion
+       ===================================================================== */
+    html[data-theme="light"] {
+      color-scheme: light;
+      --bg-primary: #F8F9FA;
+      --bg-secondary: #FFFFFF;
+      --bg-card: #FFFFFF;
+      --bg-header: rgba(248, 249, 250, 0.96);
+      --text-primary: #111827;
+      --text-secondary: #4B5563;
+      --border-color: rgba(17, 24, 39, 0.10);
+      --card-shadow: 0 10px 28px rgba(17, 24, 39, 0.08);
+      --accent: #E50914;
+      /* AA-safe companion ink/surface; #E50914 remains the signature accent. */
+      --accent-ink: #B20710;
+      --accent-surface: #B20710;
+      --bg-base: var(--bg-primary);
+    }
+    html[data-theme="dark"] { color-scheme: dark; }
+    html.theme-switching,
+    html.theme-switching *,
+    html.theme-switching *::before,
+    html.theme-switching *::after { transition: none !important; }
+
+    html[data-theme="light"] body {
+      background: var(--bg-primary);
+      color: var(--text-primary);
+    }
+    header.sticky {
+      background: var(--bg-header) !important;
+      border-color: var(--border-color) !important;
+    }
+    .text-crimson { color: var(--accent-ink) !important; }
+    [class~="bg-crimson"] {
+      background-color: var(--accent-surface) !important;
+      color: #FFFFFF !important;
+    }
+    [class~="hover:bg-crimson"]:hover,
+    [class~="hover:bg-crimsonDeep"]:hover {
+      background-color: #8F0610 !important;
+      color: #FFFFFF !important;
+    }
+    html[data-theme="light"] header,
+    html[data-theme="light"] header.sticky {
+      background: var(--bg-header) !important;
+      border-color: var(--border-color) !important;
+    }
+    html[data-theme="light"] footer {
+      background: var(--bg-secondary) !important;
+      border-color: var(--border-color) !important;
+      color: var(--text-secondary) !important;
+    }
+    html[data-theme="light"] .stream-card,
+    html[data-theme="light"] .netflix-card,
+    html[data-theme="light"] .project-card,
+    html[data-theme="light"] .bg-velvet,
+    html[data-theme="light"] .bg-surface,
+    html[data-theme="light"] .bg-card {
+      background: var(--bg-secondary) !important;
+      border-color: var(--border-color) !important;
+      box-shadow: var(--card-shadow) !important;
+    }
+    html[data-theme="light"] [class~="bg-white/5"],
+    html[data-theme="light"] [class~="bg-white/10"],
+    html[data-theme="light"] [class~="bg-white/15"] {
+      background-color: rgba(17, 24, 39, 0.045) !important;
+    }
+    html[data-theme="light"] [class*="border-white/"] {
+      border-color: var(--border-color) !important;
+    }
+    html[data-theme="light"] [class~="text-white"],
+    html[data-theme="light"] [class~="text-zinc-100"],
+    html[data-theme="light"] [class~="text-zinc-200"] {
+      color: var(--text-primary) !important;
+    }
+    html[data-theme="light"] [class~="text-zinc-300"],
+    html[data-theme="light"] [class~="text-zinc-400"],
+    html[data-theme="light"] [class~="text-zinc-500"],
+    html[data-theme="light"] [class~="text-zinc-600"] {
+      color: var(--text-secondary) !important;
+    }
+    html[data-theme="light"] [class~="bg-crimson"],
+    html[data-theme="light"] [class~="bg-crimson"] [class~="text-white"],
+    html[data-theme="light"] [class~="hover:bg-crimson"]:hover {
+      color: #FFFFFF !important;
+    }
+    html[data-theme="light"] [class~="text-amberAccent"] { color: #8A5200 !important; }
+    html[data-theme="light"] [class~="text-tealAccent"] { color: #155E75 !important; }
+
+    /* Poster art intentionally stays dark in either theme for legible white type. */
+    html[data-theme="light"] .director-cut-card { color: #FFFFFF; }
+    html[data-theme="light"] .director-cut-card [class~="text-white"] { color: #FFFFFF !important; }
+    html[data-theme="light"] .director-cut-card [class~="text-zinc-300"],
+    html[data-theme="light"] .director-cut-card [class~="text-zinc-400"] { color: #D1D5DB !important; }
+    html[data-theme="light"] .director-cut-card [class~="text-crimson"] { color: #FF5962 !important; }
+
+    /* Contact finale remains a dark cinematic panel in the editorial theme. */
+    html[data-theme="light"] #contact { color: #FFFFFF; }
+    html[data-theme="light"] #contact [class~="text-white"] { color: #FFFFFF !important; }
+    html[data-theme="light"] #contact [class~="text-zinc-300"] { color: #E5E7EB !important; }
+    html[data-theme="light"] #intro-gate {
+      background: rgba(255, 255, 255, 0.98) !important;
+      color: var(--text-primary) !important;
+    }
+    html[data-theme="light"] #intro-gate [class~="text-white"] { color: var(--text-primary) !important; }
+    html[data-theme="light"] #theme-toggle {
+      background: rgba(17, 24, 39, 0.06);
+      color: var(--text-primary);
+      border-color: var(--border-color);
+    }
+
+    /* Deep WhatsApp green preserves high-contrast white text in both themes. */
+    #hero-whatsapp-cta[hidden] { display: none !important; }
+    .whatsapp-cta {
+      background: #075E54;
+      color: #FFFFFF;
+      border: 1px solid rgba(7, 94, 84, 0.8);
+    }
+    .whatsapp-cta:hover { background: #064E45; color: #FFFFFF; }
+    #whatsapp-float {
+      position: fixed;
+      right: 1rem;
+      bottom: 1rem;
+      z-index: 29;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.55rem;
+      padding: 0.7rem 1rem;
+      border-radius: 999px;
+      box-shadow: 0 8px 22px rgba(0, 0, 0, 0.28);
+      font: 700 0.78rem/1 'Instrument Sans', system-ui, sans-serif;
+      white-space: nowrap;
+    }
+    body:not([data-profile="client"]) #whatsapp-float,
+    body.tbot-active #whatsapp-float,
+    #whatsapp-float[hidden] { display: none !important; }
+    @media (max-width: 768px) {
+      #whatsapp-float { right: 0.85rem; bottom: 0.85rem; padding: 0.65rem 0.85rem; }
+    }
 </style>
 </head>
 <body class="selection:bg-crimson selection:text-white">
@@ -960,6 +1118,17 @@
           </button>
         </div>
 
+        <button type="button" id="theme-toggle" onclick="togglePortfolioTheme()"
+                class="inline-flex items-center justify-center w-9 h-9 shrink-0 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-zinc-200 transition"
+                aria-label="Switch to light theme" title="Switch to light theme" aria-pressed="false">
+          <svg id="theme-icon-sun" class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+            <circle cx="12" cy="12" r="4"></circle><path d="M12 2v2m0 16v2M4.93 4.93l1.42 1.42m11.3 11.3 1.42 1.42M2 12h2m16 0h2M4.93 19.07l1.42-1.42m11.3-11.3 1.42-1.42"></path>
+          </svg>
+          <svg id="theme-icon-moon" class="hidden w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+            <path d="M20.5 14.2A8.5 8.5 0 0 1 9.8 3.5 8.6 8.6 0 1 0 20.5 14.2Z"></path>
+          </svg>
+        </button>
+
         <button type="button" id="stickman-toggle-header" data-stickman-toggle onclick="toggleStickman()"
                 aria-pressed="false" title="Summon the T-Bot companion" aria-label="Summon T-Bot" 
                 class="inline-flex items-center gap-1.5 px-2.5 sm:px-3 py-2 rounded-xl bg-white/5 hover:bg-crimson/20 border border-white/10 text-zinc-300 hover:text-white text-[10px] sm:text-xs font-mono transition whitespace-nowrap">
@@ -1058,6 +1227,13 @@
                 <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/>
               </svg>
               <span id="hero-secondary-label">GitHub Profile</span>
+            </a>
+
+            <a id="hero-whatsapp-cta" data-whatsapp-link hidden href="https://wa.me/91XXXXXXXXXX?text=Hi%20Tanishq!%20I%20saw%20your%20portfolio%20and%20would%20like%20to%20connect."
+               target="_blank" rel="noopener noreferrer"
+               class="hidden whatsapp-cta inline-flex items-center gap-2 px-5 py-3.5 rounded-xl font-semibold text-sm sm:text-base transition">
+              <svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.52 3.48A11.82 11.82 0 0 0 12.1 0C5.55 0 .22 5.33.22 11.88c0 2.1.55 4.15 1.6 5.96L.12 24l6.32-1.66a11.9 11.9 0 0 0 5.66 1.44h.01c6.55 0 11.88-5.33 11.88-11.88 0-3.17-1.23-6.15-3.47-8.42ZM12.1 21.75h-.01a9.87 9.87 0 0 1-5.03-1.38l-.36-.21-3.75.99 1-3.66-.23-.38a9.86 9.86 0 0 1-1.51-5.23c0-5.45 4.44-9.89 9.9-9.89a9.82 9.82 0 0 1 7 2.9 9.83 9.83 0 0 1 2.9 7c0 5.46-4.44 9.9-9.91 9.9Zm5.43-7.41c-.3-.15-1.77-.87-2.05-.97-.28-.1-.48-.15-.68.15-.2.3-.78.97-.95 1.17-.17.2-.35.23-.65.08-.3-.15-1.26-.46-2.4-1.47-.89-.79-1.49-1.77-1.67-2.07-.17-.3-.02-.46.13-.61.13-.13.3-.35.45-.53.15-.18.2-.3.3-.5.1-.2.05-.38-.03-.53-.08-.15-.68-1.63-.93-2.23-.24-.58-.49-.5-.68-.51h-.58c-.2 0-.53.08-.8.38-.28.3-1.05 1.02-1.05 2.5s1.08 2.9 1.23 3.1c.15.2 2.12 3.24 5.14 4.54.72.31 1.28.5 1.72.64.72.23 1.38.2 1.9.12.58-.09 1.77-.72 2.02-1.42.25-.7.25-1.3.18-1.42-.08-.13-.28-.2-.58-.35Z"></path></svg>
+              <span>Chat on WhatsApp</span>
             </a>
 
             <button type="button" id="hero-hire-cta" onclick="openContactModal()"
@@ -1201,6 +1377,7 @@
                     <span class="min-w-0 rounded-lg border border-white/15 bg-black/35 px-1.5 py-1.5 text-center font-mono text-[8px] sm:text-[9px] font-bold tracking-wide text-zinc-200 whitespace-nowrap">FULL-STACK</span>
                   </div>
                 </div>
+                <div aria-hidden="true" class="pointer-events-none absolute inset-x-0 bottom-0 z-[15] h-48 bg-gradient-to-t from-[#030406]/98 via-[#030406]/70 to-transparent"></div>
               </div>
 
             </div>
@@ -1928,6 +2105,12 @@
                 <span>→</span>
               </button>
 
+              <a data-whatsapp-link href="https://wa.me/91XXXXXXXXXX?text=Hi%20Tanishq!%20I%20saw%20your%20portfolio%20and%20would%20like%20to%20connect." target="_blank" rel="noopener noreferrer"
+                 class="whatsapp-cta inline-flex items-center gap-2 px-5 py-3.5 rounded-xl font-bold text-sm sm:text-base transition">
+                <svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.52 3.48A11.82 11.82 0 0 0 12.1 0C5.55 0 .22 5.33.22 11.88c0 2.1.55 4.15 1.6 5.96L.12 24l6.32-1.66a11.9 11.9 0 0 0 5.66 1.44h.01c6.55 0 11.88-5.33 11.88-11.88 0-3.17-1.23-6.15-3.47-8.42ZM12.1 21.75h-.01a9.87 9.87 0 0 1-5.03-1.38l-.36-.21-3.75.99 1-3.66-.23-.38a9.86 9.86 0 0 1-1.51-5.23c0-5.45 4.44-9.89 9.9-9.89a9.82 9.82 0 0 1 7 2.9 9.83 9.83 0 0 1 2.9 7c0 5.46-4.44 9.9-9.91 9.9Zm5.43-7.41c-.3-.15-1.77-.87-2.05-.97-.28-.1-.48-.15-.68.15-.2.3-.78.97-.95 1.17-.17.2-.35.23-.65.08-.3-.15-1.26-.46-2.4-1.47-.89-.79-1.49-1.77-1.67-2.07-.17-.3-.02-.46.13-.61.13-.13.3-.35.45-.53.15-.18.2-.3.3-.5.1-.2.05-.38-.03-.53-.08-.15-.68-1.63-.93-2.23-.24-.58-.49-.5-.68-.51h-.58c-.2 0-.53.08-.8.38-.28.3-1.05 1.02-1.05 2.5s1.08 2.9 1.23 3.1c.15.2 2.12 3.24 5.14 4.54.72.31 1.28.5 1.72.64.72.23 1.38.2 1.9.12.58-.09 1.77-.72 2.02-1.42.25-.7.25-1.3.18-1.42-.08-.13-.28-.2-.58-.35Z"></path></svg>
+                <span>Chat on WhatsApp</span>
+              </a>
+
               <button type="button" onclick="copyEmailAddress()"
                       class="inline-flex items-center gap-2 px-5 py-3.5 rounded-xl bg-white/10 hover:bg-white/15 border border-white/15 text-white font-mono text-xs sm:text-sm transition">
                 <svg class="w-4 h-4 text-amberAccent" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -1957,6 +2140,11 @@
         <a href="https://github.com/Warrior1012" target="_blank" rel="noopener noreferrer" class="hover:text-white transition">GitHub</a>
         <a href="https://www.linkedin.com/in/tanishq-agarwal" target="_blank" rel="noopener noreferrer" class="hover:text-white transition">LinkedIn</a>
         <a href="https://www.instagram.com/tanishqagarwal1012" target="_blank" rel="noopener noreferrer" class="hover:text-white transition">Instagram</a>
+        <a data-whatsapp-link href="https://wa.me/91XXXXXXXXXX?text=Hi%20Tanishq!%20I%20saw%20your%20portfolio%20and%20would%20like%20to%20connect." target="_blank" rel="noopener noreferrer"
+           class="whatsapp-cta inline-flex items-center gap-2 rounded-full px-3 py-2 font-sans font-bold text-[11px] transition">
+          <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.52 3.48A11.82 11.82 0 0 0 12.1 0C5.55 0 .22 5.33.22 11.88c0 2.1.55 4.15 1.6 5.96L.12 24l6.32-1.66a11.9 11.9 0 0 0 5.66 1.44h.01c6.55 0 11.88-5.33 11.88-11.88 0-3.17-1.23-6.15-3.47-8.42ZM12.1 21.75h-.01a9.87 9.87 0 0 1-5.03-1.38l-.36-.21-3.75.99 1-3.66-.23-.38a9.86 9.86 0 0 1-1.51-5.23c0-5.45 4.44-9.89 9.9-9.89a9.82 9.82 0 0 1 7 2.9 9.83 9.83 0 0 1 2.9 7c0 5.46-4.44 9.9-9.91 9.9Z"></path></svg>
+          Chat on WhatsApp
+        </a>
         <button type="button" onclick="openResumeModal()" class="hover:text-crimson transition">Resume</button>
         <button type="button" onclick="openCommandPalette()" class="hover:text-amberAccent transition">⌘K Palette</button>
       </div>
@@ -2010,6 +2198,12 @@
       </svg>
     </a>
   </aside>
+
+  <a id="whatsapp-float" data-whatsapp-link hidden href="https://wa.me/91XXXXXXXXXX?text=Hi%20Tanishq!%20I%20saw%20your%20portfolio%20and%20would%20like%20to%20connect."
+     target="_blank" rel="noopener noreferrer" class="whatsapp-cta" aria-label="Chat with Tanishq on WhatsApp">
+    <svg class="w-5 h-5 shrink-0" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.52 3.48A11.82 11.82 0 0 0 12.1 0C5.55 0 .22 5.33.22 11.88c0 2.1.55 4.15 1.6 5.96L.12 24l6.32-1.66a11.9 11.9 0 0 0 5.66 1.44h.01c6.55 0 11.88-5.33 11.88-11.88 0-3.17-1.23-6.15-3.47-8.42ZM12.1 21.75h-.01a9.87 9.87 0 0 1-5.03-1.38l-.36-.21-3.75.99 1-3.66-.23-.38a9.86 9.86 0 0 1-1.51-5.23c0-5.45 4.44-9.89 9.9-9.89a9.82 9.82 0 0 1 7 2.9 9.83 9.83 0 0 1 2.9 7c0 5.46-4.44 9.9-9.91 9.9Z"></path></svg>
+    <span>WhatsApp Me</span>
+  </a>
 
   <!-- ========================================================================
        9. PLAYFUL INTERACTIVE SVG STICKMAN COMPANION
@@ -2537,10 +2731,37 @@
     let stickmanSnoozeTimer = null;
     let visitedSections = new Set();
 
+    function setPortfolioTheme(theme, persist = true) {
+      const selected = theme === 'light' ? 'light' : 'dark';
+      document.documentElement.classList.add('theme-switching');
+      document.documentElement.setAttribute('data-theme', selected);
+      requestAnimationFrame(() => requestAnimationFrame(() => document.documentElement.classList.remove('theme-switching')));
+      const sun = document.getElementById('theme-icon-sun');
+      const moon = document.getElementById('theme-icon-moon');
+      const toggle = document.getElementById('theme-toggle');
+      if (sun) sun.classList.toggle('hidden', selected === 'light');
+      if (moon) moon.classList.toggle('hidden', selected !== 'light');
+      if (toggle) {
+        const nextLabel = selected === 'light' ? 'Switch to dark theme' : 'Switch to light theme';
+        toggle.setAttribute('aria-label', nextLabel);
+        toggle.setAttribute('title', nextLabel);
+        toggle.setAttribute('aria-pressed', String(selected === 'light'));
+      }
+      if (persist) {
+        try { localStorage.setItem('portfolio-theme', selected); } catch (error) { /* Storage may be blocked. */ }
+      }
+    }
+
+    function togglePortfolioTheme() {
+      const current = document.documentElement.getAttribute('data-theme') === 'light' ? 'light' : 'dark';
+      setPortfolioTheme(current === 'dark' ? 'light' : 'dark', true);
+    }
+
     /* ------------------------------------------------------------------------
        2. INITIALIZATION ON DOM READY
        ------------------------------------------------------------------------ */
     document.addEventListener('DOMContentLoaded', () => {
+      setPortfolioTheme(document.documentElement.getAttribute('data-theme') || 'dark', false);
       renderProjectsCarousel('All');
       renderSkillTabs();
       renderSkillChips('Languages');
@@ -2658,6 +2879,13 @@
       }
 
       const isClient = role === 'client';
+      const heroWhatsApp = document.getElementById('hero-whatsapp-cta');
+      const floatingWhatsApp = document.getElementById('whatsapp-float');
+      if (heroWhatsApp) {
+        heroWhatsApp.classList.toggle('hidden', !isClient);
+        heroWhatsApp.hidden = !isClient;
+      }
+      if (floatingWhatsApp) floatingWhatsApp.hidden = !isClient;
       const primary = document.getElementById('hero-primary-cta');
       const primaryLabel = document.getElementById('hero-primary-label');
       if (primary) primary.href = isClient ? '#contact' : '#projects';
@@ -3648,6 +3876,7 @@
     function stopStickman(showNotice = false) {
       stickmanVisible = false;
       stickShown = false;
+      document.body.classList.remove('tbot-active');
       clearStickmanStartupTimers();
       if (window.stickmanEngine) window.stickmanEngine.disable();
       const layer = document.getElementById('stickman-layer');
@@ -3681,6 +3910,7 @@
       }
       stickmanVisible = true;
       stickShown = true;
+      document.body.classList.add('tbot-active');
       const layer = document.getElementById('stickman-layer');
       if (layer) {
         layer.classList.add('is-active');
