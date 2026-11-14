@@ -832,6 +832,40 @@
       color: var(--text-primary) !important;
     }
     html[data-theme="light"] #intro-gate [class~="text-white"] { color: var(--text-primary) !important; }
+    html[data-theme="light"] #intro-gate button[onclick^="selectProfile("] {
+      background: #FFFFFF !important;
+      border-color: var(--border-color) !important;
+      box-shadow: var(--card-shadow) !important;
+    }
+    html[data-theme="light"] #intro-gate button[onclick^="selectProfile("]:hover {
+      background: #F3F4F6 !important;
+    }
+    html[data-theme="light"] #intro-gate button svg[class~="text-white"] { color: #FFFFFF !important; }
+
+    /* Light surfaces for utility panels and dialogs, while preserving dark resume chrome. */
+    html[data-theme="light"] aside[aria-label="Quick utilities dock"],
+    html[data-theme="light"] #stickman-speech,
+    html[data-theme="light"] #stickman-menu,
+    html[data-theme="light"] #project-modal > div,
+    html[data-theme="light"] #command-modal > div,
+    html[data-theme="light"] #contact-modal > div {
+      background: #FFFFFF !important;
+      color: var(--text-primary) !important;
+      border-color: var(--border-color) !important;
+      box-shadow: var(--card-shadow) !important;
+    }
+    html[data-theme="light"] #project-modal > div > .sticky {
+      background: #F3F4F6 !important;
+      border-color: var(--border-color) !important;
+    }
+    html[data-theme="light"] #resume-modal .no-print {
+      background: #111827 !important;
+      color: #FFFFFF !important;
+      border-color: rgba(255,255,255,0.14) !important;
+    }
+    html[data-theme="light"] #resume-modal .no-print [class~="text-white"] { color: #FFFFFF !important; }
+    html[data-theme="light"] #resume-modal .no-print [class~="text-zinc-300"] { color: #D1D5DB !important; }
+
     html[data-theme="light"] #theme-toggle {
       background: rgba(17, 24, 39, 0.06);
       color: var(--text-primary);
