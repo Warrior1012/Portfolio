@@ -2598,6 +2598,8 @@
       const cfg = PROFILE_CONFIGS[role] || PROFILE_CONFIGS.developer;
       const visible = new Set(cfg.visible);
       document.body.dataset.profile = role;
+      // Recruiter and Client views lead with the personal Creator Cut; Monogram remains one click away.
+      switchPosterEdition(role === 'recruiter' || role === 'client' ? 'creator' : 'monogram');
 
       const synopsisEl = document.getElementById('hero-synopsis');
       if (synopsisEl) synopsisEl.textContent = cfg.synopsis;
